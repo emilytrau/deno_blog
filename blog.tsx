@@ -380,6 +380,7 @@ export async function handler(
     ) {
       return new Response(post.markdown);
     }
+    const postOgImage = post.ogImage ?? ogImage;
     return html({
       ...sharedHtmlOptions,
       title: post.title,
@@ -387,11 +388,11 @@ export async function handler(
         "description": post.snippet,
         "og:title": post.title,
         "og:description": post.snippet,
-        "og:image": post.ogImage,
+        "og:image": postOgImage,
         "twitter:title": post.title,
         "twitter:description": post.snippet,
-        "twitter:image": post.ogImage,
-        "twitter:card": post.ogImage ? twitterCard : undefined,
+        "twitter:image": postOgImage,
+        "twitter:card": postOgImage ? twitterCard : undefined,
       },
       styles: [
         gfm.CSS,
