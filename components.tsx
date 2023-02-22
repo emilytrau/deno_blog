@@ -25,12 +25,12 @@ export interface HeaderProps {
 export function Header({ state }: HeaderProps) {
   return (
     <header
-      class="w-full h-90 lt-sm:h-80 bg-cover bg-center bg-no-repeat"
+      class="w-full h-80 lt-sm:h-80 bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: state.cover ? `url(${state.cover})` : undefined,
       }}
     >
-      <div class="max-w-screen-sm h-full px-6 mx-auto flex flex-col items-center justify-center">
+      <div class="max-w-screen-lg h-full px-6 mx-auto flex flex-col items-center justify-center">
         {state.avatar && (
           <a
             href="/"
@@ -112,7 +112,7 @@ export function Index({ state, posts }: IndexProps) {
     <div class="home">
       {state.header || <Header state={state} />}
 
-      <div class="max-w-screen-sm px-6 mx-auto">
+      <div class="max-w-screen-lg px-6 mx-auto">
         <div class="pt-16 lt-sm:pt-12 border-t-1 border-gray-300/80">
           {postIndex.map((post) => (
             <PostCard
@@ -179,8 +179,8 @@ export function PostPage({ post, state }: PostPageProps) {
   return (
     <div className={`post ${post.pathname.substring(1)}`}>
       {state.showHeaderOnPostPage && (state.header || <Header state={state} />)}
-      <div class="max-w-screen-sm px-6 pt-8 mx-auto">
-        <div class="pb-16">
+      <div class="max-w-screen-lg px-6 pt-8 mx-auto">
+        <div class="pb-8">
           <a
             href="/"
             class="inline-flex items-center gap-1 text-sm text-gray-500/80 hover:text-gray-700 transition-colors"
