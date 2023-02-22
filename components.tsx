@@ -18,6 +18,82 @@ const socialAppIcons = new Map([
   ["mastodon.social", IconMastodon],
 ]);
 
+interface HeaderProps {
+  state: BlogState;
+}
+
+function Header({ state }: HeaderProps) {
+  return (
+    <header
+      class="w-full h-90 lt-sm:h-80 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: state.cover ? `url(${state.cover})` : undefined,
+      }}
+    >
+      <div class="max-w-screen-sm h-full px-6 mx-auto flex flex-col items-center justify-center">
+        {state.avatar && (
+          <a
+            href="/"
+            class={[
+              "bg-cover bg-center bg-no-repeat w-25 h-25 border-4 border-white",
+              state.avatarClass ?? "rounded-full",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            style={{ backgroundImage: `url(${state.avatar})` }}
+          />
+        )}
+        <h1
+          class="mt-3 text-4xl text-gray-900 dark:text-gray-100 font-bold"
+          style={{ color: state.coverTextColor }}
+        >
+          {state.title ?? "My Blog"}
+        </h1>
+        {state.description && (
+          <p
+            class="text-lg text-gray-600 dark:text-gray-400"
+            style={{ color: state.coverTextColor }}
+          >
+            {state.description}
+          </p>
+        )}
+        {state.links && (
+          <nav class="mt-3 flex gap-2">
+            {state.links.map((link) => {
+              const url = new URL(link.url);
+              let Icon = IconExternalLink;
+              if (url.protocol === "mailto:") {
+                Icon = IconEmail;
+              } else {
+                const icon = socialAppIcons.get(
+                  url.hostname.replace(/^www\./, ""),
+                );
+                if (icon) {
+                  Icon = icon;
+                }
+              }
+
+              return (
+                <a
+                  class="relative flex items-center justify-center w-8 h-8 rounded-full bg-gray-600/10 dark:bg-gray-400/10 text-gray-700 dark:text-gray-400 hover:bg-gray-600/15 dark:hover:bg-gray-400/15 hover:text-black dark:hover:text-white transition-colors group"
+                  href={link.url}
+                  rel={link.target === "_blank"
+                    ? "noopener noreferrer"
+                    : ""}
+                  target={link.target ?? "_self"}
+                >
+                  {link.icon ? link.icon : <Icon />}
+                  <Tooltip>{link.title}</Tooltip>
+                </a>
+              );
+            })}
+          </nav>
+        )}
+      </div>
+    </header>
+  )
+}
+
 interface IndexProps {
   state: BlogState;
   posts: Map<string, Post>;
@@ -34,75 +110,7 @@ export function Index({ state, posts }: IndexProps) {
 
   return (
     <div class="home">
-      {state.header || (
-        <header
-          class="w-full h-90 lt-sm:h-80 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: state.cover ? `url(${state.cover})` : undefined,
-          }}
-        >
-          <div class="max-w-screen-sm h-full px-6 mx-auto flex flex-col items-center justify-center">
-            {state.avatar && (
-              <a
-                href="/"
-                class={[
-                  "bg-cover bg-center bg-no-repeat w-25 h-25 border-4 border-white",
-                  state.avatarClass ?? "rounded-full",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                style={{ backgroundImage: `url(${state.avatar})` }}
-              />
-            )}
-            <h1
-              class="mt-3 text-4xl text-gray-900 dark:text-gray-100 font-bold"
-              style={{ color: state.coverTextColor }}
-            >
-              {state.title ?? "My Blog"}
-            </h1>
-            {state.description && (
-              <p
-                class="text-lg text-gray-600 dark:text-gray-400"
-                style={{ color: state.coverTextColor }}
-              >
-                {state.description}
-              </p>
-            )}
-            {state.links && (
-              <nav class="mt-3 flex gap-2">
-                {state.links.map((link) => {
-                  const url = new URL(link.url);
-                  let Icon = IconExternalLink;
-                  if (url.protocol === "mailto:") {
-                    Icon = IconEmail;
-                  } else {
-                    const icon = socialAppIcons.get(
-                      url.hostname.replace(/^www\./, ""),
-                    );
-                    if (icon) {
-                      Icon = icon;
-                    }
-                  }
-
-                  return (
-                    <a
-                      class="relative flex items-center justify-center w-8 h-8 rounded-full bg-gray-600/10 dark:bg-gray-400/10 text-gray-700 dark:text-gray-400 hover:bg-gray-600/15 dark:hover:bg-gray-400/15 hover:text-black dark:hover:text-white transition-colors group"
-                      href={link.url}
-                      rel={link.target === "_blank"
-                        ? "noopener noreferrer"
-                        : ""}
-                      target={link.target ?? "_self"}
-                    >
-                      {link.icon ? link.icon : <Icon />}
-                      <Tooltip>{link.title}</Tooltip>
-                    </a>
-                  );
-                })}
-              </nav>
-            )}
-          </div>
-        </header>
-      )}
+      {state.header || <Header state={state} />}
 
       <div class="max-w-screen-sm px-6 mx-auto">
         <div class="pt-16 lt-sm:pt-12 border-t-1 border-gray-300/80">
@@ -170,7 +178,7 @@ export function PostPage({ post, state }: PostPageProps) {
   });
   return (
     <div className={`post ${post.pathname.substring(1)}`}>
-      {state.showHeaderOnPostPage && state.header}
+      {state.showHeaderOnPostPage && (state.header || <Header state={state} />)}
       <div class="max-w-screen-sm px-6 pt-8 mx-auto">
         <div class="pb-16">
           <a
