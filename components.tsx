@@ -10,7 +10,7 @@
 import { Fragment, gfm, h } from "./deps.ts";
 import type { BlogState, DateFormat, Post } from "./types.d.ts";
 
-const socialAppIcons = new Map([
+export const socialAppIcons = new Map([
   ["github.com", IconGithub],
   ["twitter.com", IconTwitter],
   ["instagram.com", IconInstagram],
@@ -18,11 +18,11 @@ const socialAppIcons = new Map([
   ["mastodon.social", IconMastodon],
 ]);
 
-interface HeaderProps {
+export interface HeaderProps {
   state: BlogState;
 }
 
-function Header({ state }: HeaderProps) {
+export function Header({ state }: HeaderProps) {
   return (
     <header
       class="w-full h-90 lt-sm:h-80 bg-cover bg-center bg-no-repeat"
@@ -94,7 +94,7 @@ function Header({ state }: HeaderProps) {
   )
 }
 
-interface IndexProps {
+export interface IndexProps {
   state: BlogState;
   posts: Map<string, Post>;
 }
@@ -130,7 +130,7 @@ export function Index({ state, posts }: IndexProps) {
   );
 }
 
-function PostCard(
+export function PostCard(
   { post, dateFormat, lang }: {
     post: Post;
     dateFormat?: DateFormat;
@@ -166,7 +166,7 @@ function PostCard(
   );
 }
 
-interface PostPageProps {
+export interface PostPageProps {
   state: BlogState;
   post: Post;
 }
@@ -238,7 +238,11 @@ export function PostPage({ post, state }: PostPageProps) {
   );
 }
 
-function Footer(props: { author?: string }) {
+export interface FooterProps {
+  author?: string;
+}
+
+export function Footer(props: FooterProps) {
   return (
     <footer class="mt-20 pb-16 lt-sm:pb-8 lt-sm:mt-16">
       <p class="flex items-center gap-2.5 text-gray-400/800 dark:text-gray-500/800 text-sm">
@@ -263,7 +267,7 @@ function Footer(props: { author?: string }) {
   );
 }
 
-function Tooltip({ children }: { children: string }) {
+export function Tooltip({ children }: { children: string }) {
   return (
     <div
       className={"absolute top-10 px-3 h-8 !leading-8 bg-black/80 text-white text-sm rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity"}
@@ -291,7 +295,7 @@ function Tooltip({ children }: { children: string }) {
   );
 }
 
-function PrettyDate(
+export function PrettyDate(
   { date, dateFormat }: {
     date: Date;
     dateFormat?: DateFormat;
@@ -306,7 +310,7 @@ function PrettyDate(
   return <time dateTime={date.toISOString()}>{formatted}</time>;
 }
 
-function Tags({ tags }: { tags?: string[] }) {
+export function Tags({ tags }: { tags?: string[] }) {
   return tags && tags.length > 0
     ? (
       <section class="flex gap-x-2 flex-wrap">
@@ -320,7 +324,7 @@ function Tags({ tags }: { tags?: string[] }) {
     : null;
 }
 
-function IconRssFeed() {
+export function IconRssFeed() {
   return (
     <svg
       class="inline-block w-4 h-4"
@@ -334,7 +338,7 @@ function IconRssFeed() {
   );
 }
 
-function IconEmail() {
+export function IconEmail() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -350,7 +354,7 @@ function IconEmail() {
   );
 }
 
-function IconExternalLink() {
+export function IconExternalLink() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -366,7 +370,7 @@ function IconExternalLink() {
   );
 }
 
-function IconGithub() {
+export function IconGithub() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -382,7 +386,7 @@ function IconGithub() {
   );
 }
 
-function IconTwitter() {
+export function IconTwitter() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -398,7 +402,7 @@ function IconTwitter() {
   );
 }
 
-function IconInstagram() {
+export function IconInstagram() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -414,7 +418,7 @@ function IconInstagram() {
   );
 }
 
-function IconLinkedin() {
+export function IconLinkedin() {
   return (
     <svg
       className="inline-block w-5 h-5"
@@ -430,7 +434,7 @@ function IconLinkedin() {
   );
 }
 
-function IconMastodon() {
+export function IconMastodon() {
   return (
     <svg
       className="inline-block w-4 h-4"
